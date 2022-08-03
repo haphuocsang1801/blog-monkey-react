@@ -3,7 +3,7 @@ import { useAuth } from "contexts/auth-context";
 import { auth } from "firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const menuLinks = [
   {
@@ -21,6 +21,16 @@ const menuLinks = [
 ];
 
 const HeaderStyles = styled.header`
+  .header-avatar {
+    width: 52px;
+    height: 52px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 100rem;
+    }
+  }
   padding: 20px 0;
   .header-main {
     display: flex;
@@ -134,6 +144,9 @@ const Header = () => {
             </Button>
           ) : (
             <div className="flex items-center gap-4">
+              <Link to="/profile" className="header-avatar">
+                <img src={userInfo?.avatar} alt="avatar" />
+              </Link>
               <div className="header-auth">
                 {userInfo.fullname && (
                   <strong className="text-primary">{userInfo?.fullname}</strong>

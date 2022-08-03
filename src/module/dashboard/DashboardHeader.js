@@ -46,9 +46,13 @@ const DashboardHeader = () => {
         <span className="hidden lg:inline-block">Monkey Blogging</span>
       </NavLink>
       <div className="header-right">
-        <Button to="/manage/add-post" className="header-button" height="52px">
-          Write new post
-        </Button>
+        {userInfo?.role !== 3 ? (
+          <Button to="/manage/add-post" className="header-button" height="52px">
+            Write new post
+          </Button>
+        ) : (
+          ""
+        )}
         <Link to="/profile" className="header-avatar">
           <img src={userInfo?.avatar} alt="" />
         </Link>

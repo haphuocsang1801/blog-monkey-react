@@ -1,3 +1,4 @@
+import { useAuth } from "contexts/auth-context";
 import React from "react";
 
 const DashboardHeading = ({ title = "", desc = "", children }) => {

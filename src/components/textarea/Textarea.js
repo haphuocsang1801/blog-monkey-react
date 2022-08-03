@@ -16,6 +16,9 @@ const TextareaStyles = styled.div`
     font-size: 14px;
     resize: none;
     min-height: 200px;
+    &:focus {
+      border: 1px solid ${(props) => props.theme.primary};
+    }
   }
   textarea::-webkit-input-placeholder {
     color: #b2b3bd;
@@ -45,7 +48,13 @@ const Textarea = ({
   });
   return (
     <TextareaStyles>
-      <textarea id={name} type={type} {...field} {...props} />
+      <textarea
+        id={name}
+        type={type}
+        {...field}
+        {...props}
+        placeholder="Enter description"
+      />
     </TextareaStyles>
   );
 };

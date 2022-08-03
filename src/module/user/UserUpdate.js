@@ -30,6 +30,7 @@ const UserUpdate = () => {
     mode: "onChange",
   });
   const [params] = useSearchParams();
+  const { userInfo } = useAuth();
   const userId = params.get("id");
   const watchStatus = watch("status");
   const watchRole = watch("role");
@@ -38,7 +39,6 @@ const UserUpdate = () => {
   const imageName = imageRegex?.length > 0 ? imageRegex[1] : "";
   const { image, setImage, progress, handleSelectImage, handleDeleteImage } =
     useFirebaseImage(setValue, getValues, imageName, deleteAvatar);
-  const { userInfo } = useAuth();
   const handleUpdateUser = async (values) => {
     if (!isValid) return;
     if (userInfo?.role !== userRole.ADMIN) {

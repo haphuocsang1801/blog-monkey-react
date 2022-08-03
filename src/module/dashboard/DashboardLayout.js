@@ -43,8 +43,12 @@ const DashboardLayout = () => {
   return (
     <DashboardStyles>
       <DashboardHeader></DashboardHeader>
-      <div className="dashboard-main">
-        <Sidebar></Sidebar>
+      <div
+        className={`dashboard-main  ${
+          userInfo.role === 3 ? "!grid-cols-1 md:!px-20" : ""
+        }`}
+      >
+        {userInfo.role !== 3 ? <Sidebar></Sidebar> : ""}
         <div className="dashboard-children">
           <Outlet></Outlet>
         </div>
