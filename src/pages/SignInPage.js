@@ -30,7 +30,7 @@ const SignInPage = () => {
     control,
     formState: { isValid, isSubmitting, errors },
   } = useForm({
-    mode: "onChange",
+    mode: "onSubmit",
     resolver: yupResolver(schema),
   });
   useEffect(() => {
@@ -70,7 +70,7 @@ const SignInPage = () => {
         <Field>
           <Label htmlFor="email">Email address</Label>
           <Input
-            type="email"
+            type="text"
             name="email"
             placeholder="Enter your email address"
             control={control}
