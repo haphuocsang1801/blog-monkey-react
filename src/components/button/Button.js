@@ -39,7 +39,7 @@ const ButtonStyles = styled.button`
     pointer-events: none;
   }
   &:hover {
-    opacity: 0.9;
+    opacity: 0.8;
   }
 `;
 /**

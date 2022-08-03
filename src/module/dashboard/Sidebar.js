@@ -1,13 +1,15 @@
 import { auth } from "firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const SidebarStyles = styled.div`
-  width: 300px;
-  background: #ffffff;
-  box-shadow: 10px 10px 20px rgba(218, 213, 213, 0.15);
-  border-radius: 12px;
+  .sidebar {
+    width: 300px;
+    background: #ffffff;
+    box-shadow: 10px 10px 20px rgba(218, 213, 213, 0.15);
+    border-radius: 12px;
+  }
   .menu-item {
     display: flex;
     align-items: center;
@@ -17,14 +19,36 @@ const SidebarStyles = styled.div`
     color: ${(props) => props.theme.gray80};
     margin-bottom: 20px;
     cursor: pointer;
+    & > * {
+      pointer-events: none;
+    }
     &.active,
     &:hover {
       background: #f1fbf7;
       color: ${(props) => props.theme.primary};
     }
   }
-  @media screen and (max-width: 1023.98px) {
+  .toggle-menu {
     display: none;
+  }
+  @media screen and (max-width: 1023.98px) {
+    .sidebar {
+      position: fixed;
+      transition: all 0.25s;
+      transform: translateX(-320px);
+    }
+    .toggle-menu {
+      display: inline-block;
+      position: fixed;
+      top: 50px;
+      margin-top: 30px;
+      left: 5px;
+      opacity: 40%;
+      transition: all 0.25s;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 `;
 const sidebarLinks = [
@@ -130,24 +154,68 @@ const sidebarLinks = [
     onClick: () => signOut(auth),
   },
 ];
+
 const Sidebar = React.memo(() => {
+  const [toggle, setToggle] = useState(false);
+  const sidebar = useRef("");
+  const handleToggleMenu = () => {
+    setToggle(!toggle);
+  };
+  useEffect(() => {
+    const handleToggleOutSide = (e) => {
+      console.log(e.target);
+      if (
+        (!sidebar?.current.contains(e.target) &&
+          !e.target.matches(".toggle-menu")) ||
+        e.target.matches(".menu-item")
+      ) {
+        setToggle(false);
+      }
+    };
+    window.addEventListener("click", handleToggleOutSide);
+  }, []);
   return (
-    <SidebarStyles className="sidebar">
-      {sidebarLinks.map((link) => {
-        if (link.onClick)
+    <SidebarStyles>
+      <span className="cursor-pointer toggle-menu" onClick={handleToggleMenu}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 pointer-events-none cursor-none"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </span>
+      <div
+        className={`sidebar ${toggle ? "!translate-x-0" : ""}`}
+        ref={sidebar}
+      >
+        {sidebarLinks.map((link) => {
+          if (link.onClick)
+            return (
+              <div
+                className="menu-item"
+                onClick={link.onClick}
+                key={link.title}
+              >
+                <span className="menu-icon">{link.icon}</span>
+                <span className="menu-text">{link.title}</span>
+              </div>
+            );
           return (
-            <div className="menu-item" onClick={link.onClick} key={link.title}>
+            <NavLink to={link.url} className="menu-item" key={link.title}>
               <span className="menu-icon">{link.icon}</span>
               <span className="menu-text">{link.title}</span>
-            </div>
+            </NavLink>
           );
-        return (
-          <NavLink to={link.url} className="menu-item" key={link.title}>
-            <span className="menu-icon">{link.icon}</span>
-            <span className="menu-text">{link.title}</span>
-          </NavLink>
-        );
-      })}
+        })}
+      </div>
     </SidebarStyles>
   );
 });
