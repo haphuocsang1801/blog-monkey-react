@@ -163,13 +163,13 @@ const Sidebar = React.memo(() => {
   };
   useEffect(() => {
     const handleToggleOutSide = (e) => {
-      console.log(e.target);
-      if (
-        (!sidebar?.current.contains(e.target) &&
-          !e.target.matches(".toggle-menu")) ||
-        e.target.matches(".menu-item")
-      ) {
-        setToggle(false);
+      if (sidebar.current) {
+        if (
+          !sidebar?.current?.contains(e.target) &&
+          !e.target.matches(".toggle-menu")
+        ) {
+          setToggle(false);
+        }
       }
     };
     window.addEventListener("click", handleToggleOutSide);
@@ -201,7 +201,10 @@ const Sidebar = React.memo(() => {
             return (
               <div
                 className="menu-item"
-                onClick={link.onClick}
+                onClick={(e) => {
+                  setToggle(false);
+                  link.onClick();
+                }}
                 key={link.title}
               >
                 <span className="menu-icon">{link.icon}</span>
@@ -209,7 +212,14 @@ const Sidebar = React.memo(() => {
               </div>
             );
           return (
-            <NavLink to={link.url} className="menu-item" key={link.title}>
+            <NavLink
+              to={link.url}
+              onClick={(e) => {
+                setToggle(false);
+              }}
+              className="menu-item"
+              key={link.title}
+            >
               <span className="menu-icon">{link.icon}</span>
               <span className="menu-text">{link.title}</span>
             </NavLink>
