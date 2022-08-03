@@ -130,7 +130,7 @@ const sidebarLinks = [
     onClick: () => signOut(auth),
   },
 ];
-const Sidebar = () => {
+const Sidebar = React.memo(() => {
   return (
     <SidebarStyles className="sidebar">
       {sidebarLinks.map((link) => {
@@ -150,6 +150,6 @@ const Sidebar = () => {
       })}
     </SidebarStyles>
   );
-};
+});
 
 export default Sidebar;
